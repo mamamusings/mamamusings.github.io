@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <title>Google Maps example customized</title>
+
+  <script type="text/javascript" src="https://maps.google.com/maps/api/js?key=AIzaSyC1QUsSq3K3lNhCiW9vy864hg3pn0HKkIw"></script>
+
+  <script>
+    if ("geolocation" in navigator) {   // check to see if the user allowed location access
+
+        function buildMap(position) {  // function that builds the map
+
+            // pass position to a Google Maps API method to get the Lat/Long
+            var latlng = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
+
+            // use a Google Maps method to set the options for the map, including Lat/Long 
+            var myOptions = {
+                zoom: 10,
+                center: latlng,
+                mapTypeId: google.maps.MapTypeId.TERRAIN,
+                disableDefaultUI: true
+                }
+
+            // create a new map with the specified options (uses deprecated getElementByID; could use querySelector instead)
+            var myMap = new google.maps.Map(document.getElementById("map_canvas"), myOptions);
+
+            // create a new map marker   
+            var myMarker = new google.maps.Marker({
+                position: latlng,
+                icon: "baseline-directions_walk-24px.svg",
+                map: myMap
+                });
+            
+            var contentString = '<div id="content"><h2 id="firstHeading" class="firstHeading">I Did It!</h2><p>This is my very own custom info window.</p></div>';
+
+            var myInfowindow = new google.maps.InfoWindow({  // define infoWindow
+                content: contentString
+                }); // end infoWindow definition
+
+            myMarker.addListener('click', function () {  // add listener to marker
+                myInfowindow.open(myMap, myMarker); // open infowindow onclick
+                }); // end listener function
+        }   // end buildMap function
+
+        navigator.geolocation.getCurrentPosition(buildMap); // get position and pass to buildMap
+            
+
+    } else {   // end if block, start else block
+      var para = document.createElement('p');
+      para.textContent = 'Argh, no geolocation!';
+      document.body.appendChild(para);
+    }
+
+  </script>
+  <style>
+    #map_canvas {
+      width: 600px;
+      height: 600px;
+    }
+  </style>
+</head>
+
+<body>
+  <h1>Google Maps API Example Exercise</h1>
+  <div id="map_canvas"></div>
+</body>
+
+</html>
